@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: ''
+                git branch: 'main', url: 'https://github.com/anithavalluri02/myntra.git'
                 sh 'pwd && ls -l'
             }
         }
