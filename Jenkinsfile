@@ -2,55 +2,60 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = 'your-dockerhub-username'
-        DOCKERHUB_REPO = 'myntra-app'
-        IMAGE_TAG = "v${env.BUILD_NUMBER}"
+        DOCKERHUB_REPO = "anithavalluri/myntra"   // change to your DockerHub repo
+        IMAGE_TAG = "v1"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/anithavalluri02/myntra.git'
-                sh 'pwd && ls -l'
-            }
-        }
-
-        stage('Build Maven Package') {
-            steps {
-                sh 'mvn clean package -DskipTests'
+                git branch: 'main', url: 'https://github.com/anithavalluri02/myntraproject.git'
+                sh 'ls -l'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh """
-                    docker build -t $DOCKERHUB_USER/$DOCKERHUB_REPO:$IMAGE_TAG .
-                    """
-                }
+                sh '''
+                  echo "Building Docker image..."
+                  docker build -t $DOCKERHUB_REPO:$IMAGE_TAG .
+                '''
             }
         }
 
         stage('Push to DockerHub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh """
-                    echo $PASS | docker login -u $USER --password-stdin
-                    docker push $DOCKERHUB_USER/$DOCKERHUB_REPO:$IMAGE_TAG
-                    docker logout
-                    """
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-cred',
+                                                  usernameVariable: 'DOCKER_USER',
+                                                  passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                      echo "Logging into DockerHub..."
+                      echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                      docker push $DOCKERHUB_REPO:$IMAGE_TAG
+                    '''
                 }
             }
         }
 
-        stage('Deploy to Swarm') {
+        stage('Deploy to Docker Swarm') {
             steps {
-                script {
-                    sh """
-                    docker service update --image $DOCKERHUB_USER/$DOCKERHUB_REPO:$IMAGE_TAG myntra_service || \
-                    docker service create --name myntra_service -p 8080:8080 $DOCKERHUB_USER/$DOCKERHUB_REPO:$IMAGE_TAG
-                    """
-                }
+                sh '''
+                  echo "Deploying Myntra app on Swarm..."
+
+                  # initialize swarm if not already
+                  docker swarm init || true
+
+                  # remove old service if exists
+                  docker service rm myntra || true
+
+                  # create new service with exposed port 8080
+                  docker service create \
+                    --name myntra \
+                    --publish 8080:80 \
+                    $DOCKERHUB_REPO:$IMAGE_TAG
+
+                  echo "Myntra service deployed successfully!"
+                '''
             }
         }
     }
