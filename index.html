@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Myntra • Simple Static Landing</title>
+  <meta name="description" content="A simple Myntra-style static page for Docker demo." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f0f12;--card:#18181d;--muted:#a1a1aa;--text:#fafafa;--pill:#ef4444;--accent:#f97316;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#0f0f12 0%,#141418 100%);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header{
+      position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px);
+      background:rgba(15,15,18,.6);border-bottom:1px solid #222;
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .brand .logo{
+      width:34px;height:34px;border-radius:10px;background:
+        conic-gradient(from 200deg,#ef4444,#f59e0b,#22c55e,#3b82f6,#ef4444);
+      box-shadow:0 6px 20px rgba(239,68,68,.35);
+    }
+    .menu{display:flex;gap:16px;font-weight:600;color:var(--muted)}
+    .menu a:hover{color:#fff}
+    .cta{
+      padding:10px 14px;border-radius:14px;background:var(--pill);font-weight:700
+    }
+    .hero{
+      display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center;
+      padding:42px 0 24px;
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #333;
+      border-radius:999px;color:var(--muted);font-size:12px
+    }
+    .title{font-size:40px;line-height:1.1;margin:16px 0 10px}
+    .subtitle{color:var(--muted);max-width:52ch}
+    .hero-card{
+      background:radial-gradient(1200px 400px at 20% -10%,rgba(249,115,22,.18),transparent 60%),
+                 linear-gradient(180deg,#1a1a21,#131318);
+      border:1px solid #26262d;border-radius:24px;padding:20px;min-height:220px;
+      display:grid;place-items:center;text-align:center;
+    }
+    .hero-card .tag{font-size:12px;color:var(--muted);margin-bottom:8px}
+    .hero-card .big{font-size:28px;font-weight:800}
+    .grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:18px 0 40px;
+    }
+    .card{
+      background:var(--card);border:1px solid #26262d;border-radius:18px;overflow:hidden
+    }
+    .thumb{
+      aspect-ratio:4/3;display:grid;place-items:center;font-weight:700;
+      background:linear-gradient(135deg,#2a2a31 0%,#1d1d24 100%);
+    }
+    .thumb::after{
+      content:"M";font-size:40px;opacity:.12;letter-spacing:2px
+    }
+    .info{padding:12px}
+    .name{font-weight:700;margin:0 0 6px}
+    .price{display:flex;align-items:center;gap:8px}
+    .now{font-weight:800}
+    .mrp{color:var(--muted);text-decoration:line-through;font-size:14px}
+    .off{color:#22c55e;font-size:12px;font-weight:700}
+    .footer{color:var(--muted);border-top:1px solid #222;padding:22px 0;text-align:center}
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:540px){
+      .title{font-size:30px}
+      .grid{grid-template-columns:1fr}
+      .menu{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><div class="logo"></div> MYNTRA</div>
+      <nav class="menu">
+        <a href="#">Men</a>
+        <a href="#">Women</a>
+        <a href="#">Kids</a>
+        <a href="#">Beauty</a>
+        <a href="#">Studio</a>
+      </nav>
+      <a class="cta" href="#">Download App</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="badge">End of Season • Up to 70% OFF</span>
+        <h1 class="title">Style that sticks. Prices that don’t.</h1>
+        <p class="subtitle">
+          A minimal Myntra-style landing page to demo Docker + Nginx. Pure HTML/CSS,
+          no build tools, perfect for a lightweight container.
+        </p>
+      </div>
+      <div class="hero-card">
+        <div>
+          <div class="tag">Today’s Highlight</div>
+          <div class="big">Exclusive Deals Drop</div>
+          <div class="subtitle" style="margin-top:8px">
+            Free shipping on orders over ₹999. Limited time.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid">
+        <!-- Repeatable product card -->
+        <article class="card">
+          <div class="thumb" aria-hidden="true"></div>
+          <div class="info">
+            <p class="name">Roadster Solid Tee</p>
+            <div class="price">
+              <span class="now">₹399</span>
+              <span class="mrp">₹799</span>
+              <span class="off">50% OFF</span>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb"></div>
+          <div class="info">
+            <p class="name">HRX Running Shoes</p>
+            <div class="price">
+              <span class="now">₹1,899</span>
+              <span class="mrp">₹3,999</span>
+              <span class="off">52% OFF</span>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb"></div>
+          <div class="info">
+            <p class="name">DressBerry Midi Dress</p>
+            <div class="price">
+              <span class="now">₹1,299</span>
+              <span class="mrp">₹2,499</span>
+              <span class="off">48% OFF</span>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="thumb"></div>
+          <div class="info">
+            <p class="name">Mast & Harbour Shirt</p>
+            <div class="price">
+              <span class="now">₹899</span>
+              <span class="mrp">₹1,799</span>
+              <span class="off">50% OFF</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer">
+    © <span id="year"></span> Myntra Demo • Static site for Docker tutorial
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
