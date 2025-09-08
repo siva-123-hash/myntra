@@ -37,21 +37,24 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
-            steps {
-                sh '''
-                  echo "Running Myntra container locally..."
+       stage('Run Container') {
+    steps {
+        sh '''
+          echo "Running Myntra container locally..."
 
-                  # stop old container if running
-                  docker rm -f myntra-container || true
+          # Stop and remove old container
+          docker rm -f myntra-container || true
 
-                  # run new container on port 8080
-                  docker run -d --name myntra-container -p 8080:80 $DOCKERHUB_REPO:$IMAGE_TAG
+          # Free up port 8080 (stop swarm service if using it)
+          docker service rm myntra || true
 
-                  echo "Myntra container is up at http://<server-ip>:8080"
-                '''
-            }
-        }
+          # Run new container
+          docker run -d --name myntra-container -p 8080:80 $DOCKERHUB_REPO:$IMAGE_TAG
+
+          echo "Myntra container is up at http://<server-ip>:8080"
+        '''
+    }
+}
 
         stage('Deploy to Docker Swarm') {
             steps {
