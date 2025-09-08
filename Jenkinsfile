@@ -45,13 +45,13 @@ pipeline {
           # Stop and remove old container
           docker rm -f myntra-container || true
 
-          # Free up port 8080 (stop swarm service if using it)
+          # Free up port 8081 (stop swarm service if using it)
           docker service rm myntra || true
 
           # Run new container
-          docker run -d --name myntra-container -p 8080:80 $DOCKERHUB_REPO:$IMAGE_TAG
+          docker run -d --name myntra-container -p 8081:80 $DOCKERHUB_REPO:$IMAGE_TAG
 
-          echo "Myntra container is up at http://<server-ip>:8080"
+          echo "Myntra container is up at http://<server-ip>:8081"
         '''
     }
 }
@@ -67,10 +67,10 @@ pipeline {
                   # remove old service if exists
                   docker service rm myntra || true
 
-                  # create new service with exposed port 8080
+                  # create new service with exposed port 8081
                   docker service create \
                     --name myntra \
-                    --publish 8080:80 \
+                    --publish 8081:80 \
                     $DOCKERHUB_REPO:$IMAGE_TAG
 
                   echo "Myntra service deployed successfully!"
