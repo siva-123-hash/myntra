@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_REPO = "siva0927/myntra"   // change to your DockerHub repo
+        DOCKERHUB_REPO = "siva0927/myntra" // change to your DockerHub repo
         IMAGE_TAG = "v1"
     }
 
@@ -71,6 +71,7 @@ pipeline {
                   docker service create \
                     --name myntra \
                     --publish 8081:80 \
+                    -replicas 3 \
                     $DOCKERHUB_REPO:$IMAGE_TAG
 
                   echo "Myntra service deployed successfully!"
