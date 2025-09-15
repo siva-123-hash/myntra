@@ -71,7 +71,7 @@ pipeline {
                   docker service create \
                     --name myntra \
                     --publish 8081:80 \
-                    -replicas 3 \
+                    --replicas 3 \
                     $DOCKERHUB_REPO:$IMAGE_TAG
 
                   echo "Myntra service deployed successfully!"
