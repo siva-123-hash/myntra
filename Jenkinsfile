@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_REPO = "anithavalluri/myntra"   // change to your DockerHub repo
+        DOCKERHUB_REPO = "siva0927/myntra"   // change to your DockerHub repo
         IMAGE_TAG = "v1"
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/anithavalluri02/myntra.git'
+                git branch: 'main', url: ''
                 sh 'ls -l'
             }
         }
